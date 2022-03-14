@@ -25,6 +25,27 @@ class SecretLocation
 	vector3 Pos;
 }
 
+class SecretFinderHandler : EventHandler
+{
+	override void CheckReplacement(ReplaceEvent e)
+	{
+		if (!e.Replacement)
+		{
+			return;
+		}
+
+		switch (e.Replacement.GetClassName())
+		{
+			case 'HDMap':
+				if (random[zrdhdrand]() <= 64)
+				{
+					e.Replacement = "HDSecretFinder";
+				}
+				break;
+		}
+	}
+}
+
 class HDSecretFinder : HDPickup
 {
 	override void Tick()
@@ -64,7 +85,7 @@ class HDSecretFinder : HDPickup
 			return;
 		}
 
-		int closestDist = int.Max;
+		double closestDist = int.Max;
 		for (int i = 0; i < Locations.Size(); ++i)
 		{
 			if (!Locations[i].Sec && !Locations[i].Thing || Locations[i].Sec && !Locations[i].Sec.IsSecret() && Locations[i].Sec.WasSecret())
@@ -115,7 +136,7 @@ class HDSecretFinder : HDPickup
 		Inventory.Icon "FNDRA0";
 		Inventory.PickupMessage "Picked up a secret finder. Go explore!";
 		Tag "Secret finder";
-		Scale 0.2;
+		Scale 0.20;
 	}
 
 	States
