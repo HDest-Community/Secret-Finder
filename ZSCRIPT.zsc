@@ -1,0 +1,134 @@
+version "4.7"
+
+class SecretLocation
+{
+	static SecretLocation Create(Actor a, Sector s)
+	{
+		SecretLocation loc = new('SecretLocation');
+		if (a)
+		{
+			loc.Thing = a;
+			loc.Pos = a.pos;
+			return loc;
+		}
+		if (s)
+		{
+			loc.Sec = s;
+			loc.Pos = (s.centerspot, s.floorplane.ZAtPoint(s.centerspot));
+			return loc;
+		}
+		return null; // [Ace] How? Why!?
+	}
+
+	Actor Thing;
+	Sector Sec;
+	vector3 Pos;
+}
+
+class HDSecretFinder : HDPickup
+{
+	override void Tick()
+	{
+		Super.Tick();
+
+		if (!owner)
+		{
+			Active = false;
+			return;
+		}
+
+		if (Locations.Size() == 0 && !HasScanned)
+		{
+			HasScanned = true;
+			ThinkerIterator it = ThinkerIterator.Create('Actor', STAT_DEFAULT);
+			Actor a;
+			while ((a = Actor(it.Next())))
+			{
+				if (a.bCOUNTSECRET)
+				{
+					Locations.Push(SecretLocation.Create(a, null));
+				}
+			}
+
+			for (int i = 0; i < level.Sectors.Size(); ++i)
+			{
+				if (level.Sectors[i].IsSecret())
+				{
+					Locations.Push(SecretLocation.Create(null, level.Sectors[i]));
+				}
+			}
+		}
+
+		if (!Active)
+		{
+			return;
+		}
+
+		int closestDist = int.Max;
+		for (int i = 0; i < Locations.Size(); ++i)
+		{
+			if (!Locations[i].Sec && !Locations[i].Thing || Locations[i].Sec && !Locations[i].Sec.IsSecret() && Locations[i].Sec.WasSecret())
+			{
+				Locations[i].Destroy();
+				Locations.Delete(i--);
+				continue;
+			}
+
+			double dist = level.Vec3Diff(owner.pos, Locations[i].Pos).length();
+			if (dist < closestDist)
+			{
+				closestDist = dist;
+			}
+		}
+
+		if (Locations.Size() > 0 && closestDist < HDCONST_ONEMETRE * 20)
+		{
+			int freq = int(max(6, 70 * (closestDist / (HDCONST_ONEMETRE * 20))));
+			if (++PingTicker >= freq)
+			{
+				owner.A_StartSound("SecretFinder/Ping", 25, volume: 0.15, attenuation: 1.5);
+				PingTicker = 0;
+			}
+		}
+	}
+
+	override int GetSbarNum(int flags)
+	{
+		let hud = HDStatusBar(StatusBar);
+		hud.SavedColour = Active ? Font.CR_GREEN : Font.CR_RED;
+		return int(Active);
+	}
+
+	private bool Active;
+	private bool HasScanned;
+	private int PingTicker;
+	private Array<SecretLocation> Locations;
+
+	Default
+	{
+		+HDPICKUP.CHEATNOGIVE
+		+HDPICKUP.NOTINPOCKETS
+		+INVENTORY.INVBAR
+		+HDPICKUP.FITSINBACKPACK
+		HDPickup.Bulk 30;
+		HDPickup.RefID "fdr";
+		Inventory.Icon "FNDRA0";
+		Inventory.PickupMessage "Picked up a secret finder. Go explore!";
+		Tag "Secret finder";
+		Scale 0.2;
+	}
+
+	States
+	{
+		Spawn:
+			FNDR A -1;
+			Stop;
+		Use:
+			TNT1 A 0
+			{
+				invoker.Active = !invoker.Active;
+				A_StartSound("SecretFinder/"..(invoker.Active ? "Beep" : "Unbeep"), 15, CHANF_OVERLAP);
+			}
+			Fail;
+	}
+}
