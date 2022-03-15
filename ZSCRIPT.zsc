@@ -169,13 +169,13 @@ class HDSecretFinder : HDWeapon
 		vector2 bob = hpl.hudbob * 0.3;
 		bob.y += WeaponStatus[SFNProp_UseOffset];
 		
-		sb.DrawImage(GetPickupSprite(), (0, 0) + bob, sb.DI_SCREEN_CENTER | sb.DI_ITEM_CENTER, scale:(2, 2));
+		sb.DrawImage(GetPickupSprite(), bob, sb.DI_SCREEN_CENTER | sb.DI_ITEM_CENTER, box: (50, 50), scale: (2, 2));
 		int bat = hdw.WeaponStatus[SFNProp_Battery];
 		if (bat >= 0)
 		{
-			sb.DrawImage(AceCore.GetBatteryColor(bat), (0, 35) + bob, sb.DI_SCREEN_CENTER | sb.DI_ITEM_TOP, box: (30, 30), scale: (2.0, 2.0));
+			sb.DrawImage(AceCore.GetBatteryColor(bat), (0, 30) + bob, sb.DI_SCREEN_CENTER | sb.DI_ITEM_TOP, scale: (2.0, 2.0));
 		}
-		sb.DrawString(sb.pSmallFont, "\c[White]Range:\c- "..sb.FormatNumber(WeaponStatus[SFNProp_Range], 1, 2), (25, -3) + bob, sb.DI_SCREEN_CENTER | sb.DI_TEXT_ALIGN_LEFT, Font.CR_SAPPHIRE);
+		sb.DrawString(sb.pSmallFont, "\c[White]Range:\c- "..sb.FormatNumber(WeaponStatus[SFNProp_Range], 1, 2), (20, -3) + bob, sb.DI_SCREEN_CENTER | sb.DI_TEXT_ALIGN_LEFT, Font.CR_SAPPHIRE);
 	}
 
 	override int GetSbarNum(int flags)
