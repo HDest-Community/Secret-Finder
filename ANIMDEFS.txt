@@ -1,0 +1,5 @@
+texture FNDRA0
+pic FNDRA0 tics 8
+pic FNDRB0 tics 8
+pic FNDRC0 tics 8
+pic FNDRD0 tics 8
