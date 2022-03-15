@@ -79,6 +79,12 @@ class HDSecretFinder : HDWeapon
 		WeaponStatus[SFNProp_Range] = 20;
 	}
 
+	override void PreTravelled()
+	{
+		HasScanned = false;
+		Locations.Clear();
+	}
+
 	override void Tick()
 	{
 		Super.Tick();
