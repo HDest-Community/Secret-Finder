@@ -150,10 +150,10 @@ class HDSecretFinder : HDWeapon
 
 		if (Locations.Size() > 0 && closestDist < HDCONST_ONEMETRE * WeaponStatus[SFNProp_Range])
 		{
-			int freq = int(max(6, 70 * (closestDist / (HDCONST_ONEMETRE * WeaponStatus[SFNProp_Range]))));
+			int freq = int(max(5, 70 * (closestDist / (HDCONST_ONEMETRE * WeaponStatus[SFNProp_Range]))));
 			if (++PingTicker >= freq)
 			{
-				owner.A_StartSound("SecretFinder/Ping", 25, volume: 0.15, attenuation: 1.5);
+				owner.A_StartSound("SecretFinder/Ping", 25, volume: 0.4, attenuation: 1.5);
 				PingTicker = 0;
 			}
 		}
