@@ -89,8 +89,11 @@ class HDSecretFinder : HDWeapon
 	{
 		Super.Tick();
 
-		Icon = TexMan.CheckForTexture(GetPickupSprite(), TexMan.Type_Any);
-
+		if (owner)
+		{
+			Icon = TexMan.CheckForTexture(GetPickupSprite(), TexMan.Type_Any);
+		}
+		
 		if (!owner || WeaponStatus[SFNProp_Battery] <= 0)
 		{
 			Active = false;
