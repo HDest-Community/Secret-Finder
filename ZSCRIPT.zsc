@@ -207,15 +207,6 @@ class HDSecretFinder : HDWeapon
 	States
 	{
 		Spawn:
-			FNDR ABCD 8
-			{
-				if (invoker.WeaponStatus[SFNProp_Battery] <= 0)
-				{
-					SetStateLabel('SpawnOff');
-				}
-			}
-			Loop;
-		SpawnOff:
 			FNDR E -1;
 			Stop;
 		Select:
