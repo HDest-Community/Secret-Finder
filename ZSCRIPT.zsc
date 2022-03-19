@@ -231,6 +231,7 @@ class HDSecretFinder : HDWeapon
 				{
 					invoker.Active = !invoker.Active;
 					A_StartSound("SecretFinder/"..(invoker.Active ? "Beep" : "Unbeep"), 15, CHANF_OVERLAP);
+					PingTicker = 0;
 				}
 
 				if (PressingFiremode())
