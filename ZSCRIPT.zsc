@@ -186,9 +186,9 @@ class HDSecretFinder : HDWeapon
 	}
 
 	private bool Active;
-	private bool HasScanned;
 	private int PingTicker;
-	private Array<SecretLocation> Locations;
+	private transient bool HasScanned;
+	private transient Array<SecretLocation> Locations;
 
 	Default
 	{
