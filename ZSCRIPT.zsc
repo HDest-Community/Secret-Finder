@@ -166,7 +166,7 @@ class HDSecretFinder : HDWeapon
 
 	override void DrawHUDStuff(HDStatusBar sb, HDWeapon hdw, HDPlayerPawn hpl)
 	{
-		vector2 bob = hpl.hudbob * 0.3;
+		vector2 bob = hpl.wepbob * 0.3;
 		bob.y += WeaponStatus[SFNProp_UseOffset];
 		
 		sb.DrawImage(GetPickupSprite(), bob, sb.DI_SCREEN_CENTER | sb.DI_ITEM_CENTER, box: (50, 50), scale: (2, 2));
